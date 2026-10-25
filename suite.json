@@ -1,0 +1,8 @@
+{
+  "name": "Help Me Study",
+  "version": "1.0.0",
+  "skills": ["help-me-study", "help-me-assignment", "help-me-homework", "help-me-notes", "help-me-notion-sync"],
+  "shared": "help-me-shared",
+  "entrypoint": "help-me-study",
+  "python": ">=3.10"
+}

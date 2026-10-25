@@ -1,0 +1,4 @@
+interface:
+  display_name: "作业要求核验"
+  short_description: "结合任务书、课堂字幕与指定参考文献，核验老师要求、评分和提交清单。"
+  default_prompt: "请用 $help-me-assignment 核验老师的作业要求、课堂补充及公开评分标准，先不实现。"

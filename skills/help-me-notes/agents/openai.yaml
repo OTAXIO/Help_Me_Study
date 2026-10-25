@@ -1,0 +1,4 @@
+interface:
+  display_name: "课程笔记生成"
+  short_description: "先提供章节结构与详细大纲供确认，再生成逻辑清楚且便于复习的课程笔记。"
+  default_prompt: "请用 $help-me-notes 结合课件与课堂讲解，先给我笔记结构、页面树和详细大纲。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Help Me Study"
+  short_description: "协调课程作业与笔记任务，按需调用子技能并复用已经确认的选择与范围。"
+  default_prompt: "请用 $help-me-study 协调这门课的作业和复习笔记，先核验来源与任务范围。"

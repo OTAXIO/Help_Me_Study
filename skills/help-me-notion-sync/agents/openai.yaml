@@ -1,0 +1,4 @@
+interface:
+  display_name: "Notion 笔记同步"
+  short_description: "定位并记录课程页面，保留章节、附件与导航，分批同步笔记后逐页回读。"
+  default_prompt: "请用 $help-me-notion-sync 同步已经确认的课程笔记，先核对页面并保留现有资源。"

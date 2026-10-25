@@ -1,0 +1,4 @@
+interface:
+  display_name: "作业与报告生成"
+  short_description: "按老师要求完成代码、实验及报告，核查评分覆盖并整理未压缩提交材料。"
+  default_prompt: "请用 $help-me-homework 完成这份作业并检查实际产物，submit 保持未压缩。"
