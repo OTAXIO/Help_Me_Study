@@ -1,6 +1,6 @@
 ---
 name: help-me-study
-description: 协调大学课程作业与 Notion 笔记的组合任务；按需路由要求核验、作业完成、笔记大纲和页面同步。
+description: 协调大学课程作业、Notion 笔记与 PPT 演讲稿的组合任务，按需路由要求核验、报告、笔记和演讲。
 ---
 
 # Help Me Study
@@ -13,10 +13,11 @@ description: 协调大学课程作业与 Notion 笔记的组合任务；按需�
 | 完成题目、代码、实验、报告、整理 submit | [help-me-homework](../help-me-homework/SKILL.md) |
 | 设计笔记/生成或修改正文 | [help-me-notes](../help-me-notes/SKILL.md) |
 | 定位已有笔记、同步现成内容、维护页面 | [help-me-notion-sync](../help-me-notion-sync/SKILL.md) |
+| 根据 PPT 写演讲稿或修改口头表达 | [help-me-speech](../help-me-speech/SKILL.md) |
 
 组合任务按依赖顺序串联，不一次读取全部 references。单题/局部改动仅处理对应范围。
 
-作业先明确要求并展示摘要，明确后可继续；笔记先呈交具体结构和大纲，等待用户确认后生成完整正文或修改正式页面。这两种步骤不要混淆。
+作业先明确要求并展示摘要，明确后可继续；笔记先呈交结构大纲，确认后生成完整正文或改正式页；新演讲稿先确认风格、时长、听众与目标，只问缺项。不要混淆或省略这些步骤。
 
 创建本地工作目录或记录跨会话状态时才读[运行工具](../help-me-shared/references/runtime.md)。作业整理进 submit 默认未打包，即使老师要求 ZIP 也等用户明确压缩指令。
 

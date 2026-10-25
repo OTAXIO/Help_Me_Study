@@ -1,0 +1,4 @@
+interface:
+  display_name: "PPT 演讲稿生成"
+  short_description: "先确认风格、时长与听众目标，再按个人口吻生成衔接自然且主体清楚的演讲稿。"
+  default_prompt: "请用 $help-me-speech 根据这份 PPT 写演讲稿，先确认我的风格、时长、听众与表达目标。"

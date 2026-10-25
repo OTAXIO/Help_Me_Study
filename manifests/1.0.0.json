@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "suite_version": "1.0.0",
+  "files": {
+    "help-me-assignment/SKILL.md": "6dfb16dfcd0126d5fe1d7692873bf2bbabd6c891b5de06524aee856dc19e7453",
+    "help-me-assignment/agents/openai.yaml": "1e0158fefd318d4e715844259e8587167aebf6efdc11860bed26c15dee12d7d2",
+    "help-me-homework/SKILL.md": "39c8d6cb4b24d680fa8105bf8a0ca81e41fe7a5f070c7d4c5449f1216326c9a7",
+    "help-me-homework/agents/openai.yaml": "769d8646b797169a471c109a62bee890f3f75b51d7f5a38a39f38b0949349991",
+    "help-me-notes/SKILL.md": "956807be541f7cf7abf828874e471a52a5a144ea83fab07703dc7b07bf886910",
+    "help-me-notes/agents/openai.yaml": "9716c49c39fffb74d51c28781ba452ec4dcab1bfaa2252b7d6f26ca0b8fb1dc5",
+    "help-me-notion-sync/SKILL.md": "a88508c954ae9fab8b4188f856375bf6b609558712cd4d531932cb445acf8003",
+    "help-me-notion-sync/agents/openai.yaml": "6cb27afe335bfaa161bac55f0848c19dae5f818a5c46cefa41a70f7b2c54a2d5",
+    "help-me-shared/references/assignment.md": "608d8811500a25cea5de7b695eab961484c2db03b093f16e8da6c757e9c2cdcc",
+    "help-me-shared/references/canvas.md": "73615c031c7994927d9921994207d09abcf7f74118320e44c9c052162e7a6f12",
+    "help-me-shared/references/core.md": "137c823f55a05714a2ef0a26a1a0e516f81da9427216b7e28060b5b0fb7c615d",
+    "help-me-shared/references/formatting.md": "d75291ac605cc2494638915a8963a372189450ba3ed859fea7c4ab7da080a01f",
+    "help-me-shared/references/homework.md": "3d1e9bb9ee9457a9c489d2e8c670e0c75720fdaa626cf38d2e94ebf140a7dfbd",
+    "help-me-shared/references/literature.md": "8d175a0ead34c2c7b493bb7e98b59e06e56bbf7fdaa76cd6b02c53cd9e96f94d",
+    "help-me-shared/references/notes.md": "64f0f6f0ac7a7d5e83f01c8c9f40d27b9730938b0b8acb6c75086542079840d0",
+    "help-me-shared/references/notion.md": "fef04e7ca12d102e316d137116f1d48f175dd72f46b512617eaa018cee5e2726",
+    "help-me-shared/references/report.md": "1f3fabaf2b3d52ece0b513b5685f67654ad43c1647e7631b1526be3858bac82d",
+    "help-me-shared/references/runtime.md": "9116f2c8942ccc4d98d03222f3535e5c6b2fa6a3a1eeec6895d57ee6d6a07ffc",
+    "help-me-shared/references/verification.md": "20bcbb92e2bdc49f91e6107ef9e1027af40c5532e71945290ee36153c105290a",
+    "help-me-shared/scripts/study_state.py": "2c85aeb3040db65b34888ec77d0095e9b9257477832d519933824d2f0bde890b",
+    "help-me-shared/templates/notion-map.example.json": "17b276ec617b51cc086f495aa40c4c416b76e2bc555fa0f95decba852586a817",
+    "help-me-shared/templates/outline.md": "c9ba16046b5d1b3ffe5541d4b8714b22d0f86493e2d8c8ec7cb6fe10dcdacd04",
+    "help-me-shared/templates/requirements.md": "5db914978b4d3eeee26d33b2bf6578b867ff98a2c44c17459c58a943ec7bb7ac",
+    "help-me-shared/templates/rubric.md": "bc4f476668297e20da1a606583d3215bbe6ef0e894bd7343362b4746d12e5e13",
+    "help-me-study/SKILL.md": "40f6277706db12d057d3b64cca4bf1a3d03c1bc4adf791a00dece6555612804b",
+    "help-me-study/agents/openai.yaml": "1fefe71e86d2290a18236000de142c94fe88554b241945e5bb3d6be510433be6"
+  }
+}

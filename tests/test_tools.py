@@ -4,11 +4,14 @@ from copy import deepcopy
 import importlib.util
 import json
 import os
+import hashlib
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import shutil
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = ROOT / "skills" / "help-me-shared" / "scripts" / "study_state.py"
@@ -34,6 +37,9 @@ class ToolTests(unittest.TestCase):
         self.task = self.base / "课程与作业"
         self.task.mkdir()
         self.directory = self.base / "private-state"
+        environment = mock.patch.dict(os.environ, {"HELP_ME_STUDY_STATE_DIR": str(self.directory)})
+        environment.start()
+        self.addCleanup(environment.stop)
         self.example = json.loads((ROOT / "skills" / "help-me-shared" / "templates" / "notion-map.example.json").read_text(encoding="utf-8"))
 
     def workspace(self):
@@ -240,7 +246,7 @@ class ToolTests(unittest.TestCase):
         installer.install(target)
         report = validator.validate(target)
         self.assertTrue(report["passed"], report)
-        self.assertEqual(report["skills"], 5)
+        self.assertEqual(report["skills"], len(json.loads((ROOT / 'suite.json').read_text(encoding='utf-8'))['skills']))
         installed = target / "help-me-shared" / "scripts" / "study_state.py"
         result = self.run_cli("workspace", "init", "--task-dir", self.task, tool=installed)
         self.assertEqual(Path(json.loads(result.stdout)["workspace"]).name, "work")
@@ -265,6 +271,96 @@ class ToolTests(unittest.TestCase):
         result = self.run_cli("notion", "get", "--course", "missing", expected=2)
         self.assertIn("No matching", json.loads(result.stderr)["error"])
         self.assertFalse(self.directory.exists())
+
+    def fake_release(self):
+        release = self.base / "next-release"
+        shutil.copytree(ROOT / "skills", release / "skills", ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+        shutil.copytree(ROOT / "manifests", release / "manifests")
+        manifest = json.loads((ROOT / "suite.json").read_text(encoding="utf-8"))
+        manifest["version"] = "synthetic-next-version"
+        (release / "suite.json").write_text(json.dumps(manifest), encoding="utf-8")
+        report = release / "skills" / "help-me-shared" / "references" / "report.md"
+        report.write_text(report.read_text(encoding="utf-8") + "\nSynthetic next-release change.\n", encoding="utf-8")
+        return release
+
+    def test_update_backs_up_known_files_and_preserves_notion_and_extra(self):
+        target = self.base / "installed-skills"
+        installer.install(target)
+        report = target / "help-me-shared" / "references" / "report.md"
+        original = report.read_bytes()
+        extra = target / "help-me-notes" / "personal-extra.md"
+        extra.write_text("local preference", encoding="utf-8")
+        state.put_mapping(self.directory, self.example, True)
+        mapping_before = (self.directory / "notion-map.json").read_bytes()
+        release = self.fake_release()
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, update=True)
+        self.assertEqual(plan["replaced"], ["help-me-shared/references/report.md"])
+        self.assertEqual((Path(plan["backup"]) / "help-me-shared" / "references" / "report.md").read_bytes(), original)
+        self.assertIn(b"Synthetic next-release change", report.read_bytes())
+        self.assertEqual(extra.read_text(encoding="utf-8"), "local preference")
+        self.assertEqual((self.directory / "notion-map.json").read_bytes(), mapping_before)
+
+    def test_update_refuses_local_modification_before_mutating_other_files(self):
+        target = self.base / "installed-skills"
+        installer.install(target)
+        report = target / "help-me-shared" / "references" / "report.md"
+        report.write_text("user replaced this report guidance", encoding="utf-8")
+        before = {p.relative_to(target).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                  for p in target.rglob("*") if p.is_file()}
+        release = self.fake_release()
+        with mock.patch.object(installer, "ROOT", release):
+            with self.assertRaisesRegex(ValueError, "Local modifications"):
+                installer.install(target, update=True)
+        after = {p.relative_to(target).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                 for p in target.rglob("*") if p.is_file()}
+        self.assertEqual(before, after)
+
+    def test_update_dry_run_does_not_write_files_or_backups(self):
+        target = self.base / "installed-skills"
+        installer.install(target)
+        before = {p.relative_to(self.base).as_posix(): p.read_bytes() for p in self.base.rglob("*") if p.is_file()}
+        release = self.fake_release()
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, dry_run=True, update=True)
+        self.assertEqual(len(plan["replaced"]), 1)
+        self.assertIsNone(plan["backup"])
+        for name, content in before.items():
+            self.assertEqual((self.base / name).read_bytes(), content)
+        self.assertFalse(any(self.directory.rglob("backup-manifest.json")))
+
+    def test_update_uses_legacy_hashes_without_receipt(self):
+        target = self.base / "legacy-install"
+        old_report = target / "help-me-shared" / "references" / "report.md"
+        old_report.parent.mkdir(parents=True)
+        legacy_text = (ROOT / "tests" / "fixtures" / "report-v1.0.0.txt").read_bytes()
+        old_report.write_bytes(legacy_text)
+        baseline = json.loads((ROOT / "manifests" / "1.0.0.json").read_text(encoding="utf-8"))["files"]
+        self.assertEqual(hashlib.sha256(legacy_text).hexdigest(), baseline["help-me-shared/references/report.md"])
+        plan = installer.install(target, update=True)
+        self.assertEqual(plan["replaced"], ["help-me-shared/references/report.md"])
+        self.assertEqual((Path(plan["backup"]) / "help-me-shared/references/report.md").read_bytes(), legacy_text)
+        self.assertTrue(validator.validate(target)["passed"])
+
+    def test_update_is_idempotent_and_receipt_survives(self):
+        target = self.base / "installed-skills"
+        installer.install(target)
+        receipts = list(self.directory.rglob("receipt.json"))
+        self.assertEqual(len(receipts), 1)
+        before = receipts[0].read_bytes()
+        plan = installer.install(target, update=True)
+        self.assertEqual(plan["added"], [])
+        self.assertEqual(plan["replaced"], [])
+        self.assertFalse(plan["installation_state_modified"])
+        self.assertEqual(receipts[0].read_bytes(), before)
+
+    def test_update_rejects_folder_occupied_by_file_before_writes(self):
+        target = self.base / "installed-skills"
+        target.mkdir()
+        (target / "help-me-speech").write_text("occupied", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "occupied by a file"):
+            installer.install(target, update=True)
+        self.assertFalse((target / "help-me-study").exists())
 
 
 if __name__ == "__main__":

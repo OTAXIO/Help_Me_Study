@@ -1,10 +1,12 @@
 # Help Me Study
 
-为大学课程作业与中文 Notion 笔记准备的个人技能套件。总入口按需调用四个子技能；共享规则只维护一份。
+为大学课程作业、中文 Notion 笔记与 PPT 演讲稿准备的个人技能套件。总入口按需调用五个子技能；共享规则只维护一份。
 
 **默认交付为未压缩的 `submit`。只有你明确说“打包/压缩”后才创建归档，包括老师要求的 ZIP 和 Overleaf 源码包。**
 
 [完整最终 Prompt](docs/FINAL_PROMPT.zh-CN.md)保存本次所有要求，包括不确定时适度询问、笔记先审大纲、文献研读、评分覆盖和排版标准。
+
+v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：演讲先确认风格/时长/听众目标，核对主语、人称与时间；报告用项目问题、实验对照及实验关系组织层层推进的论证。
 
 ## 技能
 
@@ -15,6 +17,7 @@
 | [help-me-homework](skills/help-me-homework/SKILL.md) | 解答/代码/实验/LaTeX 报告，整理 submit |
 | [help-me-notes](skills/help-me-notes/SKILL.md) | 先结构大纲，确认后正文、公式和配图 |
 | [help-me-notion-sync](skills/help-me-notion-sync/SKILL.md) | 页面定位、层级、资源保留、同步和回读 |
+| [help-me-speech](skills/help-me-speech/SKILL.md) | PPT 演讲稿，个人表达、段落衔接、主体与时间核验 |
 
 ## 安装
 
@@ -34,7 +37,18 @@ python scripts/install.py --target "<用户技能父目录>" --dry-run
 python scripts/install.py --target "<用户技能父目录>"
 ```
 
-安装器把五个技能和 `help-me-shared` 一起安装到同一父目录，保持相对引用。**不要只装单个 SKILL.md**，共享脚本和 references 也需要。已有同名文件夹时停止，不覆盖旧版本。更新请先比较差异并保留所需改动，再由你决定替换方式；用户状态独立保存。宿主未刷新发现时可重启/刷新技能列表；当前聊天的技能目录快照不保证即时更新。
+安装器把六个技能和 `help-me-shared` 一起安装到同一父目录，保持相对引用。**不要只装单个 SKILL.md**，共享脚本和 references 也需要。普通安装遇同名目录会停止。宿主未刷新发现时可刷新/重启；当前聊天的目录快照不保证即时更新。
+
+### 更新已有安装
+
+```powershell
+python scripts/install.py --update --dry-run
+python scripts/install.py --update
+```
+
+更新按安装回执核对文件哈希；v1.0 无回执的安装使用仓库中已知旧版基线。只替换与已知版本一致的文件，用户自行改动或未知同名文件会在写入前报冲突；没有强制覆盖选项。额外自建文件保留，不自动删除旧文件。可用 `--target` 指定技能父目录。
+
+被替换的文件先以未压缩形式备份，位置见命令输出。安装回执和备份在用户状态目录的 `installations/`，可用 `--state-dir` 指定；不放源仓库或技能目标内。Notion 映射、任务大纲回执与凭据不修改。若发生文件系统 I/O 中断，可能部分更新；保留输出中的备份并检查状态后重试，不把逐文件原子替换说成全套事务。
 
 本仓库制作/推送不等于已经安装进你的全局技能目录。也不会自动连接 Notion 或配置 Canvas 凭据。
 
@@ -45,16 +59,18 @@ python scripts/install.py --target "<用户技能父目录>"
 用 $help-me-homework 完成这个作业，代码放 code、报告放 report，submit 先不要压缩。
 用 $help-me-notes 整理这门课，先给我章节结构、页面层级和详细大纲。
 用 $help-me-notion-sync 更新我已经确认的笔记，保留附件和原有章节。
+用 $help-me-speech 根据这份 PPT 写演讲稿，先问清风格、时长、听众与表达目标。
 用 $help-me-study 完成这门课的作业并补充复习笔记。
 ```
 
-作业先展示要求摘要，明确后继续；笔记大纲须用户确认后才生成完整正文或改正式页面。重要歧义询问，低影响常规细节自行决定；已确认的选择复用。
+作业先展示要求摘要，明确后继续；笔记大纲须确认后生成正文或改正式页；新演讲稿先确认风格、时长、听众与目标，只问缺项，不默认增加提纲审批。重要歧义询问，低影响细节自行决定；已确认选择复用。
 
 ## 依赖与能力边界
 
 - Canvas/课堂字幕：按需调用当前已安装的 `sjtu-canvas-skill`，由其现有配置加载凭据。仓库不复制该技能、不含凭据。
 - 文献：按需 `nature-reader`、`nature-paper-card`、`nature-ref-verifier`、`nature-downloader`。
 - 报告/图：按需 `nature-writing`、`nature-polishing`、`nature-figure`；老师模板和课程要求优先，不强套期刊结构。
+- 个人表达：优先用户授权样本；有可用风格工具时按需使用，无样本不声称充分拟合。正式/活泼借鉴通用组织和口头表达技巧，不移入他人身份、经历或独特文风。
 - Notion：需要宿主实际提供读取、写入和资源能力。连接器缺失时仍可生成本地稿，但不能宣称已同步。
 - PDF/Office：实际渲染和视觉核验依赖宿主已有文档工具，不包含 LaTeX 编译器。
 
@@ -78,4 +94,4 @@ python -m unittest discover -s tests -v
 
 也可对安装目标运行 `python scripts/validate_suite.py --skills-root "<技能父目录>"`。已有 PyYAML 时无需安装开发依赖。
 
-行为场景与验证范围见 [qa/scenarios.md](qa/scenarios.md)，实际执行结果见 [qa/validation.md](qa/validation.md)。本地辅助工具测试和结构检查不能证明模型会在所有任务中正确决策，也不等于完成一次真实 Canvas/Notion 端到端演练。
+行为场景与验证范围见 [qa/scenarios.md](qa/scenarios.md)，当前结果见 [v1.1 验证记录](qa/validation-v1.1.md)，[v1.0 记录](qa/validation.md)保留。工具测试/结构检查和同一作者语义演练不能证明模型在所有任务中正确，也不等于真实 Canvas/Notion 端到端验证。
