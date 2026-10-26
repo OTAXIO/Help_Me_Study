@@ -1,0 +1,13 @@
+{
+  "elements": [
+    {"kind": "heading", "level": 2, "text": "示例章节"},
+    {"kind": "strong", "text": "标签："},
+    {"kind": "bullet_list"},
+    {"kind": "list_item", "count": 2},
+    {"kind": "code_inline", "text": "x**2"}
+  ],
+  "tables": [
+    [["项目", "单位"], ["长度", "mm"]]
+  ],
+  "source_contains": ["`x**2`", "`*.png`"]
+}

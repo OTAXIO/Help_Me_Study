@@ -45,3 +45,7 @@ python "$STATE_TOOL" notion put --file "<本地映射.json>" --verified
 `--verified` 只记录已实际读取页面的陈述，脚本不验证网络访问。get 总提醒再读真实页面。同名多学期不自动选。改变同一课程学期的父页时，核对用户意图后才加 `--replace-parent`；更新其他字段按同一 course/term 替换。支持 list/get/put 查看和更正，不自动删除历史状态。
 
 写采用排他锁和临时文件原子替换。存在锁时停止，确认持有进程状态后人工恢复，不能盲删锁。只允许映射字段，不存 Cookie/Token。
+
+## 可选格式检查
+
+见[格式检查与依赖](format-validation.md)。`study_state.py` 仍只用标准库；独立的 `format_audit.py` 在解析 Markdown/生成 HTML 预览时需 markdown-it-py，原生快照检查本身不需该解析器。工具不自动修复或上传，输出与视觉验证分开。

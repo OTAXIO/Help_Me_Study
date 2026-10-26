@@ -1,0 +1,21 @@
+{
+  "elements": [
+    {"kind": "heading", "level": 1, "text": "笔记格式演练"},
+    {"kind": "heading", "level": 2, "text": "2.1 先确认情况"},
+    {"kind": "strong", "text": "只想了解原流程："},
+    {"kind": "strong", "text": "准备修改配置："},
+    {"kind": "emphasis", "text": "解释"},
+    {"kind": "strike", "text": "旧表述"},
+    {"kind": "bullet_list"},
+    {"kind": "ordered_list", "start": 3},
+    {"kind": "list_item", "count": 6},
+    {"kind": "quote"},
+    {"kind": "separator"},
+    {"kind": "code_inline", "text": "x**2"},
+    {"kind": "code_inline", "text": "*.png"},
+    {"kind": "link", "text": "公共参考", "href": "https://example.org"},
+    {"kind": "image", "text": "格式检查路线", "src": "format-diagram.svg"}
+  ],
+  "tables": [[["项目", "单位", "说明"], ["长度", "mm", "a|b"], ["时间", "s", "记录条件"]]],
+  "source_contains": ["result = x**2", "pattern = \"*.png\"", "`a\\|b`"]
+}

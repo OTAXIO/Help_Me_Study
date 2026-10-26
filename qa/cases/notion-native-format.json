@@ -1,0 +1,16 @@
+{
+  "results": [
+    {"type": "heading_2", "heading_2": {"rich_text": [{"type": "text", "text": {"content": "示例章节"}}]}},
+    {"type": "bulleted_list_item", "bulleted_list_item": {"rich_text": [
+      {"type": "text", "text": {"content": "标签："}, "annotations": {"bold": true}},
+      {"type": "text", "text": {"content": "说明"}, "annotations": {"bold": false}}
+    ]}},
+    {"type": "code", "code": {"language": "python", "rich_text": [{"type": "text", "text": {"content": "x**2"}}]}},
+    {"type": "equation", "equation": {"expression": "\\frac{a}{b}"}},
+    {"type": "table", "table": {"table_width": 2}, "children": {"results": [
+      {"type": "table_row", "table_row": {"cells": [[{"text": {"content": "项目"}}], [{"text": {"content": "单位"}}]]}},
+      {"type": "table_row", "table_row": {"cells": [[{"text": {"content": "长度"}}], [{"text": {"content": "mm"}}]]}}
+    ], "has_more": false}}
+  ],
+  "has_more": false
+}

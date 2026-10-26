@@ -8,6 +8,8 @@
 
 v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：演讲先确认风格/时长/听众目标，核对主语、人称与时间；报告用项目问题、实验对照及实验关系组织层层推进的论证。
 
+v1.2 增加[完整格式修复 Prompt](docs/FORMAT_PROMPT.zh-CN.md)及[格式检查流程](skills/help-me-shared/references/format-validation.md)：标题、段落、行内样式、列表、公式、代码、表格、资源和引用按目标规范生成；源结构、转换节点和最终显示分开验收。格式工具只报告问题，不批量改笔记。
+
 ## 技能
 
 | 名称 | 用途 |
@@ -21,7 +23,7 @@ v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：
 
 ## 安装
 
-需要 Python 3.10+。运行工具及安装器仅用标准库；开发校验另需 PyYAML。先克隆仓库，再在仓库根目录：
+需要 Python 3.10+。状态工具及安装器仅用标准库；开发校验需要 PyYAML 和格式解析依赖。先克隆仓库，再在仓库根目录：
 
 ```powershell
 git clone https://github.com/OTAXIO/Help_Me_Study.git
@@ -92,6 +94,20 @@ python scripts/validate_suite.py
 python -m unittest discover -s tests -v
 ```
 
-也可对安装目标运行 `python scripts/validate_suite.py --skills-root "<技能父目录>"`。已有 PyYAML 时无需安装开发依赖。
+也可对安装目标运行 `python scripts/validate_suite.py --skills-root "<技能父目录>"`。已具备 requirements-dev.txt 中依赖时无需重新安装。
 
-行为场景与验证范围见 [qa/scenarios.md](qa/scenarios.md)，当前结果见 [v1.1 验证记录](qa/validation-v1.1.md)，[v1.0 记录](qa/validation.md)保留。工具测试/结构检查和同一作者语义演练不能证明模型在所有任务中正确，也不等于真实 Canvas/Notion 端到端验证。
+### 可选格式检查
+
+状态工具不需要 Markdown 库；`format_audit.py audit/preview` 另需 `markdown-it-py>=4,<5`（本次使用已有 4.0.0），依赖清单随共享目录安装。不会自动装包，缺失时明确报错或使用现有等价工具。
+
+```powershell
+python skills/help-me-shared/scripts/format_audit.py audit qa/cases/format-good.md --expect qa/cases/format-good.expect.json
+python skills/help-me-shared/scripts/format_audit.py preview qa/cases/format-good.md --output "<新预览.html>"
+python skills/help-me-shared/scripts/format_audit.py audit-notion qa/cases/notion-native-format.json --expect qa/cases/notion-native-format.expect.json
+```
+
+详见[格式检查边界](skills/help-me-shared/references/format-validation.md)。数学正确性/排版、平台扩展、远程访问和最终 Notion/Word/PDF 显示仍需目标工具检查。原生快照是合成示例，不是真实页面。本地预览禁用原始 HTML、不会自动加载远程图片，不代表目标平台渲染。
+
+已有 Node/Playwright 时，可用 `qa/check-format-preview.cjs` 对生成的样例 HTML 做隔离浏览器 DOM 与截图检查；它不会安装浏览器或修改现有浏览器，使用单独无界面实例并阻止 HTTP(S) 请求。用 NODE_PATH 提供现有包，HELP_ME_STUDY_BROWSER_EXECUTABLE 可指定已有浏览器。该脚本只验证合成样例，不是任意页面验证器。
+
+行为场景与验证范围见 [qa/scenarios.md](qa/scenarios.md)，当前结果见 [v1.2 验证记录](qa/validation-v1.2.md)，[v1.1](qa/validation-v1.1.md)和[v1.0](qa/validation.md)记录保留。工具测试/结构检查与合成预览不能证明模型在所有任务中正确，也不等于真实 Canvas/Notion 端到端验证。

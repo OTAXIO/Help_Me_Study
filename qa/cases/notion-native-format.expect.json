@@ -1,0 +1,11 @@
+{
+  "elements": [
+    {"kind": "heading", "level": 2, "text": "示例章节"},
+    {"kind": "strong", "text": "标签："},
+    {"kind": "bullet_item", "text": "标签：说明"},
+    {"kind": "code_block", "language": "python", "text": "x**2"},
+    {"kind": "math", "text": "\\frac{a}{b}"},
+    {"kind": "table"}
+  ],
+  "tables": [[["项目", "单位"], ["长度", "mm"]]]
+}

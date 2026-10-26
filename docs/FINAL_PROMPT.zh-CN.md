@@ -4,6 +4,8 @@
 
 v1.1 的新增与修改要求见[演讲与报告增量 Prompt](SPEECH_REPORT_PROMPT.zh-CN.md)，与以下原有规则一起构成当前规范。套件现在有六个可调用技能，新增 `help-me-speech`；原规则继续有效。
 
+v1.2 的全格式修复与预防要求见[格式 Prompt](FORMAT_PROMPT.zh-CN.md)，覆盖源结构、目标转换与最终显示，不只检查加粗。
+
 ---
 
 请使用 skill-creator，设计、实现并验证大学课程学习技能套件 **Help Me Study**。

@@ -1,5 +1,7 @@
 # 决策场景与验证边界
 
+v1.2 增加[综合格式样例](cases/format-good.md)、[结构期望](cases/format-good.expect.json)、[原生快照](cases/notion-native-format.json)和[实际验证](validation-v1.2.md)。解析测试和本地浏览器检查不代表真实 Notion 或数学排版通过，不自动改写笔记。
+
 v1.1 新增[演讲合成输入](cases/speech-context.md)及[同一作者自审稿](cases/speech-self-review.md)、[报告合成输入](cases/report-context.md)及[自审稿](cases/report-self-review.md)。这些是非独立的规则演练；自动测试新增安全升级/备份/本地改动保护，不将文字匹配当语义验证。
 
 以下是合成场景与人工规则走查，不是独立模型前测，不声称已经完成真实 Canvas/Notion 任务。自动测试覆盖辅助 CLI 和安装的可观察行为，不能替代模型的语义行为评估。

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120" viewBox="0 0 900 120">
+  <rect width="900" height="120" fill="#f5f8fc"/>
+  <g fill="#e1ebf7" stroke="#6e87a9" stroke-width="2">
+    <rect x="24" y="28" width="230" height="64" rx="8"/>
+    <rect x="335" y="28" width="230" height="64" rx="8"/>
+    <rect x="646" y="28" width="230" height="64" rx="8"/>
+  </g>
+  <g stroke="#526c90" stroke-width="3" fill="none">
+    <path d="M268 60H316m-10-9 10 9-10 9M579 60H627m-10-9 10 9-10 9"/>
+  </g>
+  <g fill="#263c57" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="23">
+    <text x="139" y="68">源文本规范</text><text x="450" y="68">转换结构核验</text><text x="761" y="68">最终显示检查</text>
+  </g>
+</svg>

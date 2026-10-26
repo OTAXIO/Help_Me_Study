@@ -1,6 +1,6 @@
 {
   "name": "Help Me Study",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "skills": ["help-me-study", "help-me-assignment", "help-me-homework", "help-me-notes", "help-me-notion-sync", "help-me-speech"],
   "shared": "help-me-shared",
   "entrypoint": "help-me-study",
