@@ -95,6 +95,17 @@ class FormatTests(unittest.TestCase):
         self.assertTrue(report["checks_passed"])
         self.assertFalse(report["warnings"])
 
+    def test_legacy_math_wrapper_requires_review(self):
+        report = self.check("公式 $`x[n]`$ 和 $`X''`$。")
+        self.assertEqual([w["code"] for w in report["warnings"]],
+                         ["legacy_math_backtick_wrapper"] * 2)
+        self.assertTrue(report["requires_review"])
+
+    def test_math_quotes_and_code_examples_are_preserved(self):
+        source = "公式 $X''$ 与 $x[n]$。示例 ``$`x[n]`$``。\n\n```text\n$`x[n]`$\n```\n"
+        report = self.check(source)
+        self.assertFalse(report["warnings"], report)
+
     def test_table_data_loss_is_caught_against_intended_cells(self):
         source = "|A|B|\n|---|---|\n|1|2|lost|\n"
         report = self.check(source, {"tables": [[["A", "B"], ["1", "2", "lost"]]]})

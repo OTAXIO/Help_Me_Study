@@ -117,6 +117,16 @@ def inspect_markdown(source, profile="notes", base_dir=None):
             table = None
         elif token.type == "inline":
             children = token.children or []
+            # Inspect token boundaries to protect literal code examples.
+            for index, child in enumerate(children):
+                if (child.type == "code_inline" and index > 0 and index + 1 < len(children)
+                        and children[index - 1].type == "text"
+                        and children[index - 1].content.endswith("$")
+                        and not children[index - 1].content.endswith("\\$")
+                        and children[index + 1].type == "text"
+                        and children[index + 1].content.startswith("$")):
+                    warnings.append({"code": "legacy_math_backtick_wrapper", "line": line,
+                                     "message": "Check current target contract: use $formula$ for Notion math, without backticks"})
             if re.match(r"^\[[ xX]\]\s|^\[![A-Z]+\]", token.content):
                 warnings.append({"code": "target_extension_review", "line": line,
                                  "message": "Task items/callouts need the target's native or supported extension mapping"})
