@@ -4,11 +4,15 @@
 
 **默认交付为未压缩的 `submit`。只有你明确说“打包/压缩”后才创建归档，包括老师要求的 ZIP 和 Overleaf 源码包。**
 
+**正式报告必须使用 LaTeX 并编译 PDF：完整源工程留在工作目录的 `report/`，最终 PDF 放 `submit/`。Markdown 只作内部草稿或说明，不能替代报告。** 用户不必每次重申；编译受阻时保留源码并说明尚未完成，不能自行换格式。用户明确改格式或教师要求存在冲突时，按[报告路线](skills/help-me-shared/references/report.md)处理。
+
 [完整最终 Prompt](docs/FINAL_PROMPT.zh-CN.md)保存本次所有要求，包括不确定时适度询问、笔记先审大纲、文献研读、评分覆盖和排版标准。
 
 v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：演讲先确认风格/时长/听众目标，核对主语、人称与时间；报告用项目问题、实验对照及实验关系组织层层推进的论证。
 
 v1.2 增加[完整格式修复 Prompt](docs/FORMAT_PROMPT.zh-CN.md)及[格式检查流程](skills/help-me-shared/references/format-validation.md)：标题、段落、行内样式、列表、公式、代码、表格、资源和引用按目标规范生成；源结构、转换节点和最终显示分开验收。格式工具只报告问题，不批量改笔记。
+
+v1.2.1 将 LaTeX/PDF 报告要求落实到总入口、作业入口、要求摘要、调用提示与交付验收，防止以 Markdown 草稿结束报告任务。规则走查与实际校验范围见[验证记录](qa/validation-v1.2.1.md)。
 
 ## 技能
 
@@ -58,7 +62,7 @@ python scripts/install.py --update
 
 ```text
 用 $help-me-assignment 核验这个作业的老师要求、课堂补充和评分细则，先不实现。
-用 $help-me-homework 完成这个作业，代码放 code、报告放 report，submit 先不要压缩。
+用 $help-me-homework 完成这个作业，代码放 code，LaTeX 报告及编译 PDF 放 report，最终材料整理到 submit，先不要压缩。
 用 $help-me-notes 整理这门课，先给我章节结构、页面层级和详细大纲。
 用 $help-me-notion-sync 更新我已经确认的笔记，保留附件和原有章节。
 用 $help-me-speech 根据这份 PPT 写演讲稿，先问清风格、时长、听众与表达目标。
