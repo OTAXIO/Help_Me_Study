@@ -13,4 +13,4 @@ description: 根据 PPT 生成个人化演讲稿；先确认风格、时长、�
 4. 明确主线和每页任务，按[段落逻辑](../help-me-shared/references/narrative.md)连起段内、段间与翻页。信息够时直接生成，不额外强加提纲审批；用户要求先看提纲时等待。
 5. 按场景和时长写可朗读稿，逐页核对事实/贡献/代词/时间，再查朗读节奏。估时与真实试讲分别记录，不声称未做的实测。
 
-可用[演讲需求表](../help-me-shared/templates/speech-brief.md)与[主体表](../help-me-shared/templates/speaker-map.md)做内部记录，不混入正文。新产物放 work/report 的合理位置，Word/PDF 需要时才用对应工具生成并看实际版式。未经要求不改 PPT、不写 Notion、不发送；submit 等明确指令才压缩。
+可用[演讲需求表](../help-me-shared/templates/speech-brief.md)与[主体表](../help-me-shared/templates/speaker-map.md)做内部记录，不混入正文。新产物放 work_<agent名>/report 的合理位置，Word/PDF 需要时才用对应工具生成并看实际版式。未经要求不改 PPT、不写 Notion、不发送；submit 等明确指令才压缩。

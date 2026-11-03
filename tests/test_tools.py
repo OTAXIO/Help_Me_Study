@@ -43,7 +43,7 @@ class ToolTests(unittest.TestCase):
         self.example = json.loads((ROOT / "skills" / "help-me-shared" / "templates" / "notion-map.example.json").read_text(encoding="utf-8"))
 
     def workspace(self):
-        return Path(state.init_workspace(self.task)["workspace"])
+        return Path(state.init_workspace(self.task, "claude")["workspace"])
 
     def run_cli(self, *args, tool=TOOL, expected=0):
         env = dict(os.environ, PYTHONIOENCODING="utf-8", HELP_ME_STUDY_STATE_DIR=str(self.directory))
@@ -54,26 +54,36 @@ class ToolTests(unittest.TestCase):
 
     def test_workspace_creates_expected_uncompressed_tree(self):
         root = self.workspace()
-        self.assertEqual(root.name, "work")
+        self.assertEqual(root.name, "work_claude")
         self.assertEqual({p.name for p in root.iterdir()}, {"code", "report", "submit", state.MANIFEST})
         self.assertFalse(any(root.rglob("*.zip")))
         self.assertFalse(any(root.rglob("*.tar")))
 
     def test_collision_preserves_directory_and_file(self):
-        (self.task / "work").mkdir()
-        marker = self.task / "work" / "原文件.txt"
+        (self.task / "work_claude").mkdir()
+        marker = self.task / "work_claude" / "原文件.txt"
         marker.write_text("原内容", encoding="utf-8")
-        (self.task / "work_codex").write_text("occupied", encoding="utf-8")
+        (self.task / "work_claude_2").write_text("occupied", encoding="utf-8")
         root = self.workspace()
-        self.assertEqual(root.name, "work_codex_2")
+        self.assertEqual(root.name, "work_claude_3")
         self.assertEqual(marker.read_text(encoding="utf-8"), "原内容")
-        self.assertEqual((self.task / "work_codex").read_text(encoding="utf-8"), "occupied")
+        self.assertEqual((self.task / "work_claude_2").read_text(encoding="utf-8"), "occupied")
+
+    def test_agents_get_separate_directories(self):
+        self.assertEqual(self.workspace().name, "work_claude")
+        self.assertEqual(Path(state.init_workspace(self.task, "codex")["workspace"]).name, "work_codex")
+        self.assertFalse((self.task / "work").exists())
+
+    def test_workspace_requires_valid_agent_name(self):
+        for agent in (None, "", "Claude", "work/x", "a_b"):
+            with self.assertRaises(state.StateError):
+                state.init_workspace(self.task, agent)
 
     def test_explicit_resume_preserves_manifest_and_files(self):
         root = self.workspace()
         before = (root / state.MANIFEST).read_bytes()
         (root / "code" / "solution.py").write_text("print(1)\n", encoding="utf-8")
-        result = state.init_workspace(self.task, root)
+        result = state.init_workspace(self.task, resume=root)
         self.assertTrue(result["resumed"])
         self.assertEqual((root / state.MANIFEST).read_bytes(), before)
         self.assertTrue((root / "code" / "solution.py").exists())
@@ -83,13 +93,13 @@ class ToolTests(unittest.TestCase):
         other = self.base / "other-task"
         other.mkdir()
         with self.assertRaises(state.StateError):
-            state.init_workspace(other, root)
+            state.init_workspace(other, resume=root)
 
     def test_resume_rejects_plain_work_without_manifest(self):
         root = self.task / "work"
         root.mkdir()
         with self.assertRaises(state.StateError):
-            state.init_workspace(self.task, root)
+            state.init_workspace(self.task, resume=root)
 
     def test_outline_cannot_be_approved_without_human_receipt(self):
         root = self.workspace()
@@ -248,8 +258,8 @@ class ToolTests(unittest.TestCase):
         self.assertTrue(report["passed"], report)
         self.assertEqual(report["skills"], len(json.loads((ROOT / 'suite.json').read_text(encoding='utf-8'))['skills']))
         installed = target / "help-me-shared" / "scripts" / "study_state.py"
-        result = self.run_cli("workspace", "init", "--task-dir", self.task, tool=installed)
-        self.assertEqual(Path(json.loads(result.stdout)["workspace"]).name, "work")
+        result = self.run_cli("workspace", "init", "--task-dir", self.task, "--agent", "claude", tool=installed)
+        self.assertEqual(Path(json.loads(result.stdout)["workspace"]).name, "work_claude")
 
     def test_existing_install_is_not_overwritten(self):
         target = self.base / "installed-skills"

@@ -76,7 +76,7 @@ def workspace_manifest(workspace):
     return root, path, value
 
 
-def init_workspace(task_dir, resume=None):
+def init_workspace(task_dir, agent=None, resume=None):
     task = Path(task_dir).resolve(strict=True)
     if not task.is_dir():
         raise StateError("task-dir must be an existing directory")
@@ -90,9 +90,12 @@ def init_workspace(task_dir, resume=None):
                 raise StateError(f"Resume directory is missing or unsafe: {name}")
         return {"workspace": str(root), "resumed": True, "task_id": value["task_id"],
                 "packaging_performed": False, "note": "No files were packaged or submitted by this invocation"}
-    suffix = 0
+    # Each agent owns work_<agent>; a plain "work" is never created so agents cannot collide.
+    if agent is None or not re.fullmatch(r"[a-z0-9]+", agent):
+        raise StateError("agent must be a lowercase alphanumeric name, e.g. claude, codex")
+    suffix = 1
     while True:
-        name = "work" if suffix == 0 else "work_codex" if suffix == 1 else f"work_codex_{suffix}"
+        name = f"work_{agent}" if suffix == 1 else f"work_{agent}_{suffix}"
         root = task / name
         try:
             root.mkdir()
@@ -312,6 +315,7 @@ def main(argv=None):
     workspace = commands.add_parser("workspace").add_subparsers(dest="action", required=True)
     init = workspace.add_parser("init")
     init.add_argument("--task-dir", required=True)
+    init.add_argument("--agent")
     init.add_argument("--resume")
     outline = commands.add_parser("outline").add_subparsers(dest="action", required=True)
     for name in ("set", "status", "approve"):
@@ -336,7 +340,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "workspace":
-            result = init_workspace(args.task_dir, args.resume)
+            result = init_workspace(args.task_dir, args.agent, args.resume)
         elif args.command == "outline":
             if args.action == "set":
                 result = set_outline(args.workspace, args.file)

@@ -5,7 +5,7 @@
 | 需求 | 按需加载 |
 |---|---|
 | 关键段落、公式、图表、来源问题 | `nature-reader` 的问题/节选路线 |
-| 核心论文的完整方法与证据拆解 | `nature-paper-card`，必要输出留 work，不强塞课程报告 |
+| 核心论文的完整方法与证据拆解 | `nature-paper-card`，必要输出留 work_<agent名>，不强塞课程报告 |
 | 引用元数据/DOI 不一致 | `nature-ref-verifier` |
 | 缺全文 | `nature-downloader` 或已有合法全文工具 |
 
