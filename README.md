@@ -84,7 +84,7 @@ python scripts/install.py --update
 
 ## 本地目录与位置记录
 
-新增任务创建 `work/code`、`work/report`、`work/submit`；冲突依次选择 work_codex、work_codex_2；继续原任务显式 resume。详见[运行工具](skills/help-me-shared/references/runtime.md)。
+新增任务创建 `work_<agent名>/code`、`report`、`submit`（Claude Code 用 work_claude，Codex 用 work_codex，其他如 work_dsh），不再使用裸 work；冲突依次选择 work_<agent名>_2、_3；继续原任务显式 resume。详见[运行工具](skills/help-me-shared/references/runtime.md)。
 
 Notion 映射默认在 Windows `%LOCALAPPDATA%/HelpMeStudy/notion-map.json`，其他系统在 XDG 状态目录。可用 `HELP_ME_STUDY_STATE_DIR` 或命令选项更改，勿指向公开仓库。它保存课程/学期、父子页和核验时间，不修改宿主全局记忆。每次复用仍需读真实页面。
 

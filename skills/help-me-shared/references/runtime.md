@@ -7,11 +7,11 @@ Python 3.10+，标准库，无网络、无压缩、无课程提交/Notion 写入
 ## 工作目录
 
 ```powershell
-python "$STATE_TOOL" workspace init --task-dir "<任务目录>"
-python "$STATE_TOOL" workspace init --task-dir "<任务目录>" --resume "<任务目录>/work"
+python "$STATE_TOOL" workspace init --task-dir "<任务目录>" --agent "<agent名>"
+python "$STATE_TOOL" workspace init --task-dir "<任务目录>" --resume "<任务目录>/work_<agent名>"
 ```
 
-新任务依次尝试 work、work_codex、work_codex_2……，以 mkdir 排他创建，不覆盖现有文件/目录；生成 code/report/submit 和任务清单。继续时显式 resume，检查目录与清单归属；不自动认领旧 work。工具不检测任意外部已存在压缩包，返回 `packaging_performed:false` 仅表示本次调用没有打包。
+工作目录统一命名为 `work_<agent名>`（小写字母数字，Claude Code 用 `work_claude`，Codex 用 `work_codex`，其他 agent 同理如 `work_dsh`），不再使用裸 `work`。新任务依次尝试 work_<agent>、work_<agent>_2、work_<agent>_3……，以 mkdir 排他创建，不覆盖现有文件/目录；生成 code/report/submit 和任务清单。继续时显式 resume，检查目录与清单归属；不自动认领旧 work 或其他 agent 的 work_* 目录。工具不检测任意外部已存在压缩包，返回 `packaging_performed:false` 仅表示本次调用没有打包。
 
 ## 大纲回执
 
