@@ -21,8 +21,8 @@ v1.2.1 将 LaTeX/PDF 报告要求落实到总入口、作业入口、要求摘�
 | [help-me-study](skills/help-me-study/SKILL.md) | 组合任务入口与路由 |
 | [help-me-assignment](skills/help-me-assignment/SKILL.md) | 老师要求、字幕、文献和评分核验 |
 | [help-me-homework](skills/help-me-homework/SKILL.md) | 解答/代码/实验/LaTeX 报告，整理 submit |
-| [class-learning-note](skills/class-learning-note/SKILL.md) | 以课堂字幕、课件和老师任务为主，先确认大纲，再写详细课堂笔记 |
-| [online-research-note](skills/online-research-note/SKILL.md) | 以网络资料为主，核验教程操作与研究结论，写成学习主线和行动建议 |
+| [help-me-class-learning-note](skills/help-me-class-learning-note/SKILL.md) | 以课堂字幕、课件和老师任务为主，先确认大纲，再写详细课堂笔记 |
+| [help-me-online-research-note](skills/help-me-online-research-note/SKILL.md) | 以网络资料为主，核验教程操作与研究结论，写成学习主线和行动建议 |
 | [help-me-notion-sync](skills/help-me-notion-sync/SKILL.md) | 页面定位、层级、资源保留、同步和回读 |
 | [help-me-speech](skills/help-me-speech/SKILL.md) | PPT 演讲稿，个人表达、段落衔接、主体与时间核验 |
 
@@ -66,9 +66,9 @@ python scripts/install.py --update
 ```text
 用 $help-me-assignment 核验这个作业的老师要求、课堂补充和评分细则，先不实现。
 用 $help-me-homework 完成这个作业，代码放 code，LaTeX 报告及编译 PDF 放 report，最终材料整理到 submit，先不要压缩。
-用 $class-learning-note 整理这门课，先给阅读路线、章节问题串、老师任务和配图大纲。
-用 $online-research-note 帮我搞懂这个工具，核对网上教程的版本和操作，写清原因、核验范围与下一步。
-用 $online-research-note 调研这个方向最近有哪些方案，比较依据、局限和对我的建议，写入我给的 Notion 页面。
+用 $help-me-class-learning-note 整理这门课，先给阅读路线、章节问题串、老师任务和配图大纲。
+用 $help-me-online-research-note 帮我搞懂这个工具，核对网上教程的版本和操作，写清原因、核验范围与下一步。
+用 $help-me-online-research-note 调研这个方向最近有哪些方案，比较依据、局限和对我的建议，写入我给的 Notion 页面。
 用 $help-me-notion-sync 更新我已经确认的笔记，保留附件和原有章节。
 用 $help-me-speech 根据这份 PPT 写演讲稿，先问清风格、时长、听众与表达目标。
 用 $help-me-study 完成这门课的作业并补充复习笔记。

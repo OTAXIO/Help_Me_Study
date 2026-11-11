@@ -263,8 +263,8 @@ class ToolTests(unittest.TestCase):
 
     def test_existing_install_is_not_overwritten(self):
         target = self.base / "installed-skills"
-        (target / "class-learning-note").mkdir(parents=True)
-        marker = target / "class-learning-note" / "keep.txt"
+        (target / "help-me-class-learning-note").mkdir(parents=True)
+        marker = target / "help-me-class-learning-note" / "keep.txt"
         marker.write_text("keep", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "overwrite"):
             installer.install(target)
@@ -312,7 +312,7 @@ class ToolTests(unittest.TestCase):
         installer.install(target)
         report = target / "help-me-shared" / "references" / "report.md"
         original = report.read_bytes()
-        extra = target / "class-learning-note" / "personal-extra.md"
+        extra = target / "help-me-class-learning-note" / "personal-extra.md"
         extra.write_text("local preference", encoding="utf-8")
         state.put_mapping(self.directory, self.example, True)
         mapping_before = (self.directory / "notion-map.json").read_bytes()

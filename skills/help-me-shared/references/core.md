@@ -6,7 +6,7 @@
 
 先查来源、上下文和已有偏好，能查证就自行验证。仍不明且实质影响正确性、范围、方法、结论、交付、页面目标或重要费用/时间时询问。实质来源冲突、关键数据缺失、跨课程/学期歧义不可猜。给少量选项、影响和推荐，合并同阶段问题；等答复做独立工作，沉默不算同意。
 
-常规实现、措辞、排版、低影响可逆选择、有合理默认时自行决定，必要时说假设。用户已决定的不重复问。课堂笔记按 [class-learning-note](../../class-learning-note/SKILL.md)确认大纲；网络调研按 [online-research-note](../../online-research-note/SKILL.md)直接推进，不把课堂确认关扩张到其他任务或逐小节批准。
+常规实现、措辞、排版、低影响可逆选择、有合理默认时自行决定，必要时说假设。用户已决定的不重复问。课堂笔记按 [help-me-class-learning-note](../../help-me-class-learning-note/SKILL.md)确认大纲；网络调研按 [help-me-online-research-note](../../help-me-online-research-note/SKILL.md)直接推进，不把课堂确认关扩张到其他任务或逐小节批准。
 
 ## 真正完成与正式表达
 

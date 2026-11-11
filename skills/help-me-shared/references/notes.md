@@ -1,6 +1,6 @@
 # 怎样把笔记写得详细又好懂
 
-课堂和网络调研都读这份指南。课堂材料选择与确认步骤在 [class-learning-note](../../class-learning-note/SKILL.md)，调研与核验在 [online-research-note](../../online-research-note/SKILL.md)。这里只讲怎样写，让读者顺着问题学会，而不是看完一串概念名。
+课堂和网络调研都读这份指南。课堂材料选择与确认步骤在 [help-me-class-learning-note](../../help-me-class-learning-note/SKILL.md)，调研与核验在 [help-me-online-research-note](../../help-me-online-research-note/SKILL.md)。这里只讲怎样写，让读者顺着问题学会，而不是看完一串概念名。
 
 ## 先把学习主线写成一串问题
 

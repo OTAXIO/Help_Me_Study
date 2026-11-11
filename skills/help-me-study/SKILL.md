@@ -11,8 +11,8 @@ description: 协调课程作业、课堂笔记、网络调研笔记、Notion 同
 |---|---|
 | 只分析要求、核验老师口头说明/评分 | [help-me-assignment](../help-me-assignment/SKILL.md) |
 | 完成题目、代码、实验、报告、整理 submit | [help-me-homework](../help-me-homework/SKILL.md) |
-| 课堂、课件、老师任务、课堂字幕与课程笔记 | [class-learning-note](../class-learning-note/SKILL.md) |
-| 网上查、教程、帖子、网络视频、搞懂工具或概念、近期方向调研 | [online-research-note](../online-research-note/SKILL.md) |
+| 课堂、课件、老师任务、课堂字幕与课程笔记 | [help-me-class-learning-note](../help-me-class-learning-note/SKILL.md) |
+| 网上查、教程、帖子、网络视频、搞懂工具或概念、近期方向调研 | [help-me-online-research-note](../help-me-online-research-note/SKILL.md) |
 | 定位已有笔记、同步现成内容、维护页面 | [help-me-notion-sync](../help-me-notion-sync/SKILL.md) |
 | 根据 PPT 写演讲稿或修改口头表达 | [help-me-speech](../help-me-speech/SKILL.md) |
 

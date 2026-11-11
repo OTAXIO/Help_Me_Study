@@ -1,0 +1,4 @@
+interface:
+  display_name: "网络调研学习笔记"
+  short_description: "核对网上教程、帖子、视频和研究依据，写成有学习主线、配图与行动建议的笔记。"
+  default_prompt: "请用 $help-me-online-research-note 帮我搞懂这个主题，核验网上做法与结论，写清依据、例子和下一步。"
