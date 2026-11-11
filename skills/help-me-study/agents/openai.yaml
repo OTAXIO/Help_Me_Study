@@ -1,4 +1,4 @@
 interface:
   display_name: "Help Me Study"
-  short_description: "协调课程作业、笔记与演讲稿，按需调用子技能并复用已确认的选择与范围。"
-  default_prompt: "请用 $help-me-study 协调这门课的作业、笔记或 PPT 演讲稿，先核验任务范围和表达需求；正式报告使用 LaTeX 并编译 PDF。"
+  short_description: "协调课程作业、课堂与调研笔记、同步和演讲稿，按需路由并复用已确认范围。"
+  default_prompt: "请用 $help-me-study 协调作业、课堂或网络调研笔记及 PPT 演讲稿，按任务选择流程；正式报告使用 LaTeX 并编译 PDF。"

@@ -13,9 +13,9 @@ python "$STATE_TOOL" workspace init --task-dir "<任务目录>" --resume "<任�
 
 工作目录统一命名为 `work_<agent名>`（小写字母数字，Claude Code 用 `work_claude`，Codex 用 `work_codex`，其他 agent 同理如 `work_dsh`），不再使用裸 `work`。新任务依次尝试 work_<agent>、work_<agent>_2、work_<agent>_3……，以 mkdir 排他创建，不覆盖现有文件/目录；生成 code/report/submit 和任务清单。继续时显式 resume，检查目录与清单归属；不自动认领旧 work 或其他 agent 的 work_* 目录。工具不检测任意外部已存在压缩包，返回 `packaging_performed:false` 仅表示本次调用没有打包。
 
-## 大纲回执
+## 课堂大纲回执
 
-先写工作目录内的大纲文件，再：
+仅课堂笔记需要记录大纲确认，网络调研不增加此步骤。先写工作目录内的大纲文件，再：
 
 ```powershell
 python "$STATE_TOOL" outline set --workspace "<工作目录>" --file "notes/outline.md"

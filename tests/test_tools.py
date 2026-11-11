@@ -263,8 +263,8 @@ class ToolTests(unittest.TestCase):
 
     def test_existing_install_is_not_overwritten(self):
         target = self.base / "installed-skills"
-        (target / "help-me-notes").mkdir(parents=True)
-        marker = target / "help-me-notes" / "keep.txt"
+        (target / "class-learning-note").mkdir(parents=True)
+        marker = target / "class-learning-note" / "keep.txt"
         marker.write_text("keep", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "overwrite"):
             installer.install(target)
@@ -277,13 +277,27 @@ class ToolTests(unittest.TestCase):
         (target / "help-me-shared" / "references" / "core.md").unlink()
         self.assertFalse(validator.validate(target)["passed"])
 
+    def test_validator_detects_retired_callable_skill(self):
+        target = self.base / "installed-skills"
+        installer.install(target)
+        manifest = json.loads((ROOT / "suite.json").read_text(encoding="utf-8"))
+        legacy = json.loads((ROOT / "manifests" / "1.0.0.json").read_text(encoding="utf-8"))
+        retired = next(name for name in {key.split("/")[0] for key in legacy["files"]}
+                       if name not in manifest["skills"] + [manifest["shared"]])
+        extra = target / retired
+        extra.mkdir()
+        (extra / "SKILL.md").write_text("unexpected", encoding="utf-8")
+        report = validator.validate(target)
+        self.assertFalse(report["passed"])
+        self.assertTrue(any(retired in issue for issue in report["issues"]))
+
     def test_cli_failure_has_nonzero_status_without_creating_mapping(self):
         result = self.run_cli("notion", "get", "--course", "missing", expected=2)
         self.assertIn("No matching", json.loads(result.stderr)["error"])
         self.assertFalse(self.directory.exists())
 
     def fake_release(self):
-        release = self.base / "next-release"
+        release = Path(tempfile.mkdtemp(prefix="next-release-", dir=self.base))
         shutil.copytree(ROOT / "skills", release / "skills", ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
         shutil.copytree(ROOT / "manifests", release / "manifests")
         manifest = json.loads((ROOT / "suite.json").read_text(encoding="utf-8"))
@@ -298,7 +312,7 @@ class ToolTests(unittest.TestCase):
         installer.install(target)
         report = target / "help-me-shared" / "references" / "report.md"
         original = report.read_bytes()
-        extra = target / "help-me-notes" / "personal-extra.md"
+        extra = target / "class-learning-note" / "personal-extra.md"
         extra.write_text("local preference", encoding="utf-8")
         state.put_mapping(self.directory, self.example, True)
         mapping_before = (self.directory / "notion-map.json").read_bytes()
@@ -343,7 +357,7 @@ class ToolTests(unittest.TestCase):
         target = self.base / "legacy-install"
         old_report = target / "help-me-shared" / "references" / "report.md"
         old_report.parent.mkdir(parents=True)
-        legacy_text = (ROOT / "tests" / "fixtures" / "report-v1.0.0.txt").read_bytes()
+        legacy_text = (ROOT / "tests" / "fixtures" / "report-v1.0.0.txt").read_bytes().replace(b"\r\n", b"\n")
         old_report.write_bytes(legacy_text)
         baseline = json.loads((ROOT / "manifests" / "1.0.0.json").read_text(encoding="utf-8"))["files"]
         self.assertEqual(hashlib.sha256(legacy_text).hexdigest(), baseline["help-me-shared/references/report.md"])
@@ -351,6 +365,128 @@ class ToolTests(unittest.TestCase):
         self.assertEqual(plan["replaced"], ["help-me-shared/references/report.md"])
         self.assertEqual((Path(plan["backup"]) / "help-me-shared/references/report.md").read_bytes(), legacy_text)
         self.assertTrue(validator.validate(target)["passed"])
+
+    def retired_release(self):
+        target = self.base / "retirement-target"
+        installer.install(target)
+        release = self.fake_release()
+        manifest_path = release / "suite.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        name = "help-me-speech"
+        manifest["skills"].remove(name)
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        return target, release, name
+
+    def test_retired_skill_is_moved_to_verified_backup(self):
+        target, release, name = self.retired_release()
+        before = {p.relative_to(target / name).as_posix(): p.read_bytes()
+                  for p in (target / name).rglob("*") if p.is_file()}
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, update=True)
+            again = installer.install(target, update=True)
+        self.assertEqual(plan["removed"], [name])
+        self.assertFalse((target / name).exists())
+        for relative, data in before.items():
+            self.assertEqual((Path(plan["backup"]) / name / relative).read_bytes(), data)
+        self.assertEqual(again["removed"], [])
+        receipt = json.loads(next(self.directory.rglob("receipt.json")).read_text(encoding="utf-8"))
+        self.assertFalse(any(key.startswith(name + "/") for key in receipt["files"]))
+
+    def test_retired_skill_changes_block_entire_update(self):
+        for kind in ("edit", "extra", "missing", "empty-directory"):
+            with self.subTest(kind=kind):
+                # Each case uses a separate installation and receipt.
+                target = self.base / ("retired-" + kind)
+                installer.install(target)
+                release = self.fake_release()
+                manifest_path = release / "suite.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                name = "help-me-speech"
+                manifest["skills"].remove(name)
+                manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                entry = target / name / "SKILL.md"
+                if kind == "edit":
+                    entry.write_text("personal instructions", encoding="utf-8")
+                elif kind == "extra":
+                    (target / name / "personal.txt").write_text("keep", encoding="utf-8")
+                elif kind == "missing":
+                    entry.unlink()
+                else:
+                    (target / name / "personal-empty").mkdir()
+                before = {p.relative_to(target).as_posix(): p.read_bytes()
+                          for p in target.rglob("*") if p.is_file()}
+                receipts = {p: p.read_bytes() for p in self.directory.rglob("receipt.json")}
+                with mock.patch.object(installer, "ROOT", release):
+                    with self.assertRaisesRegex(ValueError, "Retired.*" + name):
+                        installer.install(target, update=True)
+                self.assertEqual(before, {p.relative_to(target).as_posix(): p.read_bytes()
+                                         for p in target.rglob("*") if p.is_file()})
+                self.assertTrue((target / name).is_dir())
+                for path, data in receipts.items():
+                    self.assertEqual(path.read_bytes(), data)
+
+    def test_retired_skill_dry_run_preserves_directory_and_state(self):
+        target, release, name = self.retired_release()
+        before = {p: p.read_bytes() for p in self.base.rglob("*") if p.is_file()}
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, update=True, dry_run=True)
+        self.assertEqual(plan["removed"], [name])
+        self.assertIsNone(plan["backup"])
+        self.assertTrue((target / name).is_dir())
+        self.assertEqual(before, {p: p.read_bytes() for p in self.base.rglob("*") if p.is_file()})
+
+    def test_retired_skill_only_update_still_creates_backup(self):
+        target, release, name = self.retired_release()
+        report = Path("help-me-shared/references/report.md")
+        (release / "skills" / report).write_bytes((target / report).read_bytes())
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, update=True)
+        self.assertEqual(plan["replaced"], [])
+        self.assertEqual(plan["added"], [])
+        self.assertEqual(plan["removed"], [name])
+        self.assertTrue((Path(plan["backup"]) / name / "SKILL.md").is_file())
+
+    def test_retired_skill_without_receipt_uses_known_baseline(self):
+        target, release, name = self.retired_release()
+        receipt = next(self.directory.rglob("receipt.json"))
+        known = json.loads(receipt.read_text(encoding="utf-8"))
+        # Synthetic release baseline, without changing the repository's history.
+        (release / "manifests" / "1.0.0.json").write_text(json.dumps(known), encoding="utf-8")
+        receipt.unlink()
+        unrelated = target / "unrelated-user-skill"
+        unrelated.mkdir()
+        (unrelated / "SKILL.md").write_text("keep", encoding="utf-8")
+        with mock.patch.object(installer, "ROOT", release):
+            plan = installer.install(target, update=True)
+        self.assertEqual(plan["removed"], [name])
+        self.assertFalse((target / name).exists())
+        self.assertEqual((unrelated / "SKILL.md").read_text(encoding="utf-8"), "keep")
+
+    def test_retired_skill_link_is_preserved_and_update_stops(self):
+        target, release, name = self.retired_release()
+        external = self.base / "external"
+        external.mkdir()
+        secret = external / "private.txt"
+        secret.write_text("private", encoding="utf-8")
+        entry = target / name / "linked-assets"
+        try:
+            entry.symlink_to(external, target_is_directory=True)
+        except OSError as exc:
+            if os.name != "nt":
+                raise
+            # A Windows directory junction needs no symlink privilege.
+            result = subprocess.run(["cmd", "/c", "mklink", "/J", str(entry), str(external)],
+                                    capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            self.assertEqual(result.returncode, 0, result.stderr)
+        receipt = next(self.directory.rglob("receipt.json"))
+        before = receipt.read_bytes()
+        with mock.patch.object(installer, "ROOT", release):
+            with self.assertRaisesRegex(ValueError, "escapes|linked"):
+                installer.install(target, update=True)
+        self.assertTrue(os.path.lexists(entry))
+        self.assertEqual((entry / "private.txt").read_text(encoding="utf-8"), "private")
+        self.assertEqual(secret.read_text(encoding="utf-8"), "private")
+        self.assertEqual(receipt.read_bytes(), before)
 
     def test_update_is_idempotent_and_receipt_survives(self):
         target = self.base / "installed-skills"

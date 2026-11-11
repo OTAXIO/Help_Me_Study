@@ -86,6 +86,44 @@ def changes(destination, sources, known):
     return added, replaced, unchanged
 
 
+def retired_skills(destination, names, known):
+    """Retire entire known bundles only; extra files/directories count as edits."""
+    retired = {}
+    for relative, digest in known.items():
+        if not isinstance(relative, str) or not isinstance(digest, str):
+            raise ValueError("Invalid installation baseline path/hash")
+        parts = relative.split("/")
+        if (len(parts) < 2 or any(part in ("", ".", "..") for part in parts)
+                or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", parts[0])
+                or "\\" in relative or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+            raise ValueError(f"Invalid installation baseline path/hash: {relative}")
+        if parts[0] not in names:
+            retired.setdefault(parts[0], {})[relative] = digest
+    result = {}
+    for name, expected in sorted(retired.items()):
+        folder = safe_path(destination, name)
+        if not os.path.lexists(folder):
+            continue
+        expected_dirs = {str(parent).replace("\\", "/")
+                         for relative in expected
+                         for parent in Path(relative).parents if str(parent) != "."}
+        actual, actual_dirs = {}, {name}
+        if folder.is_dir():
+            for path in folder.rglob("*"):
+                relative = path.relative_to(destination).as_posix()
+                safe_path(destination, relative)
+                if path.is_file():
+                    actual[relative] = sha(path)
+                elif path.is_dir():
+                    actual_dirs.add(relative)
+                else:
+                    raise ValueError(f"Retired skill contains an unknown entry; nothing was changed: {name}")
+        if actual != expected or actual_dirs != expected_dirs:
+            raise ValueError(f"Retired skill has local changes or incomplete/unknown content; nothing was changed: {name}")
+        result[name] = expected
+    return result
+
+
 def atomic_copy(source, destination):
     destination.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(prefix=".help-me-copy-", dir=destination.parent)
@@ -120,9 +158,10 @@ def install(target=None, dry_run=False, update=False, state_dir=None):
     receipt = private / "receipt.json"
     known = baseline(receipt, destination) if update else {}
     added, replaced, unchanged = changes(destination, sources, known)
+    retired = retired_skills(destination, names, known) if update else {}
     plan = {"target": str(destination), "version": manifest["version"], "folders": names,
             "dry_run": dry_run, "update": update, "added": added, "replaced": replaced,
-            "unchanged": len(unchanged), "notion_state_modified": False,
+            "unchanged": len(unchanged), "removed": list(retired), "notion_state_modified": False,
             "installation_state_modified": False, "backup": None}
     if dry_run:
         return plan
@@ -133,9 +172,10 @@ def install(target=None, dry_run=False, update=False, state_dir=None):
             raise ValueError("Installation appeared during preflight; refusing to overwrite")
         known = baseline(receipt, destination) if update else {}
         added, replaced, unchanged = changes(destination, sources, known)
-        plan.update(added=added, replaced=replaced, unchanged=len(unchanged))
+        retired = retired_skills(destination, names, known) if update else {}
+        plan.update(added=added, replaced=replaced, unchanged=len(unchanged), removed=list(retired))
         previous_hashes = {relative: sha(safe_path(destination, relative)) for relative in replaced}
-        if replaced:
+        if replaced or retired:
             backup = private / "backups" / (STATE.now().replace(":", "-") + "-" + uuid.uuid4().hex[:8])
             backup.mkdir(parents=True)
             for relative in replaced:
@@ -144,9 +184,19 @@ def install(target=None, dry_run=False, update=False, state_dir=None):
                 shutil.copy2(safe_path(destination, relative), saved)
                 if sha(saved) != previous_hashes[relative]:
                     raise ValueError("File changed while backing up; installation stopped")
-            STATE.atomic_json(backup / "backup-manifest.json", {"target": str(destination), "files": previous_hashes})
+            backup_hashes = dict(previous_hashes)
+            for files in retired.values():
+                backup_hashes.update(files)
+            STATE.atomic_json(backup / "backup-manifest.json", {"target": str(destination), "files": backup_hashes})
             plan["backup"] = str(backup)
         try:
+            # Recheck the whole bundle immediately before moving it out of discovery.
+            if retired != (retired_skills(destination, names, known) if update else {}):
+                raise ValueError("Retired skills changed during update")
+            for name, files in retired.items():
+                shutil.move(str(safe_path(destination, name)), str(backup / name))
+                if any(sha(backup / relative) != digest for relative, digest in files.items()):
+                    raise ValueError(f"Retired skill backup verification failed: {name}")
             for relative in added + replaced:
                 path = safe_path(destination, relative)
                 if relative in added and os.path.lexists(path):
@@ -171,7 +221,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", help="Skills parent directory; default CODEX_HOME/skills or ~/.codex/skills")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--update", action="store_true", help="Replace only files matching a known baseline; preserve local edits")
+    parser.add_argument("--update", action="store_true", help="Update known files and back up retired unmodified skills; stop on local edits")
     parser.add_argument("--state-dir", help="Private installation receipts/backups parent; default HelpMeStudy user state")
     args = parser.parse_args(argv)
     try:

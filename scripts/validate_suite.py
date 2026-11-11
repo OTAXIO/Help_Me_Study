@@ -19,6 +19,18 @@ def validate(skills_root=None):
     manifest = json.loads((ROOT / "suite.json").read_text(encoding="utf-8"))
     issues = []
     links = 0
+    names = manifest["skills"] + [manifest["shared"]]
+    if len(names) != len(set(names)):
+        issues.append("Duplicate suite folder names")
+    legacy = json.loads((ROOT / "manifests" / "1.0.0.json").read_text(encoding="utf-8"))
+    retired = {relative.split("/")[0] for relative in legacy["files"]} - set(names)
+    for name in sorted(retired):
+        if (directory / name).exists():
+            issues.append(f"Retired suite folder remains discoverable: {name}")
+    if directory == (ROOT / "skills").resolve():
+        for entry in directory.iterdir():
+            if entry.name not in names and (entry / "SKILL.md").exists():
+                issues.append(f"Unlisted callable skill: {entry.name}")
     for name in manifest["skills"]:
         path = directory / name / "SKILL.md"
         if not path.exists():

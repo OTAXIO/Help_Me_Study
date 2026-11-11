@@ -1,0 +1,4 @@
+interface:
+  display_name: "课堂学习笔记"
+  short_description: "结合课件、字幕与老师任务，先确认学习主线和大纲，再写详细易懂的课堂笔记。"
+  default_prompt: "请用 $class-learning-note 整理这门课的课件、字幕和老师任务，先给阅读路线、章节问题串和配图大纲。"

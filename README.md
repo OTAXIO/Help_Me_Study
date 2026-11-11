@@ -1,12 +1,12 @@
 # Help Me Study
 
-为大学课程作业、中文 Notion 笔记与 PPT 演讲稿准备的个人技能套件。总入口按需调用五个子技能；共享规则只维护一份。
+为课程作业、课堂学习笔记、网络调研笔记与 PPT 演讲稿准备的个人技能套件，由不同宿主的 agent 共用。当前版本 **1.3.0**，总入口按需调用六个子技能；共同笔记写法只维护一份。
 
 **默认交付为未压缩的 `submit`。只有你明确说“打包/压缩”后才创建归档，包括老师要求的 ZIP 和 Overleaf 源码包。**
 
 **正式报告必须使用 LaTeX 并编译 PDF：完整源工程留在工作目录的 `report/`，最终 PDF 放 `submit/`。Markdown 只作内部草稿或说明，不能替代报告。** 用户不必每次重申；编译受阻时保留源码并说明尚未完成，不能自行换格式。用户明确改格式或教师要求存在冲突时，按[报告路线](skills/help-me-shared/references/report.md)处理。
 
-[完整最终 Prompt](docs/FINAL_PROMPT.zh-CN.md)保存本次所有要求，包括不确定时适度询问、笔记先审大纲、文献研读、评分覆盖和排版标准。
+[最初的完整 Prompt](docs/FINAL_PROMPT.zh-CN.md)是历史需求记录。当前流程以技能入口为准：课堂笔记先确认大纲，网络调研范围清楚就直接推进。
 
 v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：演讲先确认风格/时长/听众目标，核对主语、人称与时间；报告用项目问题、实验对照及实验关系组织层层推进的论证。
 
@@ -21,7 +21,8 @@ v1.2.1 将 LaTeX/PDF 报告要求落实到总入口、作业入口、要求摘�
 | [help-me-study](skills/help-me-study/SKILL.md) | 组合任务入口与路由 |
 | [help-me-assignment](skills/help-me-assignment/SKILL.md) | 老师要求、字幕、文献和评分核验 |
 | [help-me-homework](skills/help-me-homework/SKILL.md) | 解答/代码/实验/LaTeX 报告，整理 submit |
-| [help-me-notes](skills/help-me-notes/SKILL.md) | 先结构大纲，确认后正文、公式和配图 |
+| [class-learning-note](skills/class-learning-note/SKILL.md) | 以课堂字幕、课件和老师任务为主，先确认大纲，再写详细课堂笔记 |
+| [online-research-note](skills/online-research-note/SKILL.md) | 以网络资料为主，核验教程操作与研究结论，写成学习主线和行动建议 |
 | [help-me-notion-sync](skills/help-me-notion-sync/SKILL.md) | 页面定位、层级、资源保留、同步和回读 |
 | [help-me-speech](skills/help-me-speech/SKILL.md) | PPT 演讲稿，个人表达、段落衔接、主体与时间核验 |
 
@@ -43,7 +44,7 @@ python scripts/install.py --target "<用户技能父目录>" --dry-run
 python scripts/install.py --target "<用户技能父目录>"
 ```
 
-安装器把六个技能和 `help-me-shared` 一起安装到同一父目录，保持相对引用。**不要只装单个 SKILL.md**，共享脚本和 references 也需要。普通安装遇同名目录会停止。宿主未刷新发现时可刷新/重启；当前聊天的目录快照不保证即时更新。
+安装器把七个技能和 `help-me-shared` 一起安装到同一父目录，保持相对引用。**不要只装单个 SKILL.md**，共享脚本和 references 也需要。普通安装遇同名目录会停止。可分别指定 `~/.codex/skills`、`~/.agents/skills` 或 `~/.claude/skills` 为目标；各目标独立维护回执与备份。宿主未刷新发现时可刷新/重启；当前聊天的目录快照不保证即时更新。
 
 ### 更新已有安装
 
@@ -52,9 +53,11 @@ python scripts/install.py --update --dry-run
 python scripts/install.py --update
 ```
 
-更新按安装回执核对文件哈希；v1.0 无回执的安装使用仓库中已知旧版基线。只替换与已知版本一致的文件，用户自行改动或未知同名文件会在写入前报冲突；没有强制覆盖选项。额外自建文件保留，不自动删除旧文件。可用 `--target` 指定技能父目录。
+更新按安装回执核对文件哈希；无回执时只使用仓库的 v1.0 历史基线。只替换与已知版本一致的文件，用户自行改动或未知同名文件会在写入前报冲突，没有强制覆盖选项。仍在套件内的目录保留额外自建文件，不清理其中的旧文件。
 
-被替换的文件先以未压缩形式备份，位置见命令输出。安装回执和备份在用户状态目录的 `installations/`，可用 `--state-dir` 指定；不放源仓库或技能目标内。Notion 映射、任务大纲回执与凭据不修改。若发生文件系统 I/O 中断，可能部分更新；保留输出中的备份并检查状态后重试，不把逐文件原子替换说成全套事务。
+已从套件移除的技能按回执或历史基线识别，整目录的文件集合、哈希与目录结构都匹配时才移到私有备份，避免宿主继续发现旧入口。文件被改、缺失、多出文件或目录、含链接时，报告对应路径并在写入前停止整次更新，旧目录不动。先用 `--update --dry-run` 查看 `removed` 和其他变更。无回执且与历史基线不符的版本不能自动判断为未修改，不凭目录名清理；请先检查并自行保留旧目录。可用 `--target` 指定技能父目录。
+
+被替换的文件先以未压缩形式备份；移除的技能保留整目录，备份清单记录原哈希，移动后再核对。位置见命令输出。安装回执和备份在用户状态目录的 `installations/`，可用 `--state-dir` 指定；不放源仓库或技能目标内。Notion 映射、任务大纲回执与凭据不修改。若发生文件系统 I/O 中断，可能部分更新；保留输出中的备份并检查状态后重试，不把逐文件原子替换说成全套事务。
 
 本仓库制作/推送不等于已经安装进你的全局技能目录。也不会自动连接 Notion 或配置 Canvas 凭据。
 
@@ -63,17 +66,22 @@ python scripts/install.py --update
 ```text
 用 $help-me-assignment 核验这个作业的老师要求、课堂补充和评分细则，先不实现。
 用 $help-me-homework 完成这个作业，代码放 code，LaTeX 报告及编译 PDF 放 report，最终材料整理到 submit，先不要压缩。
-用 $help-me-notes 整理这门课，先给我章节结构、页面层级和详细大纲。
+用 $class-learning-note 整理这门课，先给阅读路线、章节问题串、老师任务和配图大纲。
+用 $online-research-note 帮我搞懂这个工具，核对网上教程的版本和操作，写清原因、核验范围与下一步。
+用 $online-research-note 调研这个方向最近有哪些方案，比较依据、局限和对我的建议，写入我给的 Notion 页面。
 用 $help-me-notion-sync 更新我已经确认的笔记，保留附件和原有章节。
 用 $help-me-speech 根据这份 PPT 写演讲稿，先问清风格、时长、听众与表达目标。
 用 $help-me-study 完成这门课的作业并补充复习笔记。
 ```
 
-作业先展示要求摘要，明确后继续；笔记大纲须确认后生成正文或改正式页；新演讲稿先确认风格、时长、听众与目标，只问缺项，不默认增加提纲审批。重要歧义询问，低影响细节自行决定；已确认选择复用。
+作业先展示要求摘要，明确后继续；课堂笔记大纲须确认后生成正文或改正式页。网络调研不设大纲审批关，大型多页先告知简短结构，再继续写。新演讲稿先确认风格、时长、听众与目标，只问缺项。重要歧义询问，低影响细节自行决定；已确认选择复用。
+
+两类笔记共用[写法指南](skills/help-me-shared/references/notes.md)：从问题串和阅读路线出发，逐步解释原因，用可核对的小例子与图帮助理解，再给理解检查和继续学习。课堂任务的权威要求由 assignment 核验，课堂笔记负责教会怎么完成。调研笔记在来源或条目前标明实测、一手来源或未核验的范围，区分来源报告与自己的判断。用户明确要求写进、更新或补充到指定 Notion 页面时，按相应入口与同步规则推进；仅供参考或阅读的页面作为资料来源使用。
 
 ## 依赖与能力边界
 
 - Canvas/课堂字幕：按需调用当前已安装的 `sjtu-canvas-skill`，由其现有配置加载凭据。仓库不复制该技能、不含凭据。
+- 网络正文、字幕与评论：实际发现并读取已安装的 `agent-reach` 说明，配合宿主搜索与浏览器；不包含它的安装副本或平台凭据。
 - 文献：按需 `nature-reader`、`nature-paper-card`、`nature-ref-verifier`、`nature-downloader`。
 - 报告/图：按需 `nature-writing`、`nature-polishing`、`nature-figure`；老师模板和课程要求优先，不强套期刊结构。
 - 个人表达：优先用户授权样本；有可用风格工具时按需使用，无样本不声称充分拟合。正式/活泼借鉴通用组织和口头表达技巧，不移入他人身份、经历或独特文风。
@@ -88,7 +96,7 @@ python scripts/install.py --update
 
 Notion 映射默认在 Windows `%LOCALAPPDATA%/HelpMeStudy/notion-map.json`，其他系统在 XDG 状态目录。可用 `HELP_ME_STUDY_STATE_DIR` 或命令选项更改，勿指向公开仓库。它保存课程/学期、父子页和核验时间，不修改宿主全局记忆。每次复用仍需读真实页面。
 
-大纲回执保存 SHA-256；改动后旧确认失效。`--user-confirmed` 和 `--verified` 是对已经发生的人类确认/远程核验的记录，不是独立权限认证或网络验证。所有辅助 CLI 均不联网、不写 Notion、不打包、不提交课程作业。
+课堂大纲回执保存 SHA-256；改动后旧确认失效。网络调研不使用它增加审批关。`--user-confirmed` 和 `--verified` 是对已经发生的人类确认/远程核验的记录，不是独立权限认证或网络验证。非课程调研直接使用目标页，不伪造课程/学期以录入课程映射。所有辅助 CLI 均不联网、不写 Notion、不打包、不提交课程作业。
 
 ## 开发验证
 
