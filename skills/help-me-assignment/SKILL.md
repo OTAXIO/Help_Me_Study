@@ -7,7 +7,7 @@ description: 拆解并核验课程作业要求、课堂字幕补充、指定文�
 
 读[共享规则](../help-me-shared/references/core.md)和[要求与评分流程](../help-me-shared/references/assignment.md)。只分析时不开始实现或提交。
 
-1. 清点并完整读本次任务书、课件、图表、代码说明和公开评分资料；扫描页/公式看原图。列出来源覆盖与缺口。
+1. 清点并完整读本次任务书、课件、图表、代码说明和公开评分资料（在课程目录结构下，Canvas 下载的作业原始材料位于 `课程名/作业/<作业名称>_<时间>/要求/`）；扫描页/公式看原图。列出来源覆盖与缺口。
 2. 需要课堂核验时读[Canvas 路线](../help-me-shared/references/canvas.md)，解析实际课程/学期/视频，记录页码和时间戳。含混字幕不升级为要求。
 3. 有指定参考文献时读[文献学习路线](../help-me-shared/references/literature.md)，区分必读、复现对象、方法来源和补充。
 4. 使用[要求模板](../help-me-shared/templates/requirements.md)与[评分模板](../help-me-shared/templates/rubric.md)，把必做/选做、来源、产物、验证及未知权重写清。需要正式报告时，摘要明确 LaTeX 源码和编译 PDF；老师未指定格式或仅要求 PDF，都不意味着可改交 Markdown。明确的不兼容要求标出来源并解决冲突。
