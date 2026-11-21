@@ -1,6 +1,6 @@
 ---
 name: help-me-homework
-description: 按老师要求与评分细则完成课程题目、代码、实验及 LaTeX 报告，检查并整理未压缩的 submit 材料。
+description: 依据作业要求与评分细则完成题目、代码、实验及 LaTeX/PDF 报告，核验产出并整理未压缩的 submit 目录。
 ---
 
 # 作业完成与交付

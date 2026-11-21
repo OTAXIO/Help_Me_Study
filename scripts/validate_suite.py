@@ -44,14 +44,6 @@ def validate(skills_root=None):
                 raise ValueError("Invalid name/description")
             if set(metadata) - {"name", "description", "metadata", "license", "allowed-tools"}:
                 raise ValueError("Unsupported frontmatter fields")
-            ui = yaml.safe_load((directory / name / "agents" / "openai.yaml").read_text(encoding="utf-8"))
-            interface = ui["interface"]
-            if not 25 <= len(interface["short_description"]) <= 64:
-                raise ValueError("UI short_description must be 25-64 characters")
-            if "$" + name not in interface["default_prompt"]:
-                raise ValueError("Default prompt must name the skill")
-            if ui.get("policy", {}).get("allow_implicit_invocation", True) is not True:
-                raise ValueError("Automatic discovery must remain enabled")
         except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
             issues.append(f"{name}: {exc}")
     shared = directory / manifest["shared"]

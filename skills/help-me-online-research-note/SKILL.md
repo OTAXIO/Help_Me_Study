@@ -1,6 +1,6 @@
 ---
 name: help-me-online-research-note
-description: 网上查资料并形成学习或调研笔记，用于教程、帖子、网络视频、帮我搞懂某个东西、工具安装使用、算法概念或最近大家在做什么；课堂课件和老师讲解为主时使用 help-me-class-learning-note。
+description: 检索并交叉核验网络技术资料、教程、视频与社区讨论，生成带证据边界的学习或方向调研笔记；课程笔记使用 help-me-class-learning-note。
 ---
 
 # 网络调研学习笔记

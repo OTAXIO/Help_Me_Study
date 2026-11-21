@@ -1,6 +1,6 @@
 ---
 name: help-me-notion-sync
-description: 定位 Notion 页面，同步课堂或网络调研笔记、维护页面层级与附件；课程页面可持久记录位置。
+description: 定位目标 Notion 页面并持久化课程映射，按既有层级与附件约束分批同步笔记并逐页回读核验。
 ---
 
 # Notion 定位与同步

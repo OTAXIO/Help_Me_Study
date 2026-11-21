@@ -1,6 +1,6 @@
 ---
 name: help-me-class-learning-note
-description: 整理或补充课堂学习笔记，从 Canvas 补下载缺失的课件和课程文件，结合老师讲解、任务和课堂视频字幕生成复习笔记；网络调研使用 help-me-online-research-note。
+description: 基于课件、课堂字幕与课程任务生成课堂学习笔记，支持从 Canvas 补下载缺失资料并将残留 temp/review 目录归档至 rubbish；独立调研使用 help-me-online-research-note。
 ---
 
 # 课堂学习笔记
@@ -9,7 +9,7 @@ description: 整理或补充课堂学习笔记，从 Canvas 补下载缺失的�
 
 ## 先读材料，确定本讲在教什么
 
-涉及 Canvas 课程时，先按[Canvas 路线](../help-me-shared/references/canvas.md#补下载课堂资料)核对本地文件并补下载缺项，归入课程目录直属的 `资料/课件`、`资料/作业` 或 `资料/其他文件`。只要求补下载时，完成归档并报告结果即可。
+涉及 Canvas 课程时，先按[Canvas 路线](../help-me-shared/references/canvas.md#补下载课堂资料)核对本地文件并补下载缺项，归入课程目录直属的 `资料/课件`、`资料/作业` 或 `资料/其他文件`。课程目录下存在其他 agent 遗留的 `temp`、`review` 目录时，按[残留目录归档](../help-me-shared/references/canvas.md#整理残留临时目录)先盘点内容，确认为临时/复盘产物后移入 `资料/其他文件/rubbish`，不直接删除。只要求补下载或整理残留目录时，完成归档并报告结果即可。
 
 读取课件、匹配的课堂视频字幕、老师任务和口头要求，再读已有笔记。字幕获取按[Canvas 路线](../help-me-shared/references/canvas.md)；已有 Notion 页先交[同步技能](../help-me-notion-sync/SKILL.md)只读定位。
 
