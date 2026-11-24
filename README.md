@@ -6,6 +6,8 @@
 
 **正式报告必须使用 LaTeX 并编译 PDF：完整源工程留在工作目录的 `report/`，最终 PDF 放 `submit/`。Markdown 只作内部草稿或说明，不能替代报告。** 用户不必每次重申；编译受阻时保留源码并说明尚未完成，不能自行换格式。用户明确改格式或教师要求存在冲突时，按[报告路线](skills/help-me-shared/references/report.md)处理。
 
+**所有任务在最终交付、编译或同步 Notion 前，必须执行[最终去 AI 痕迹](skills/help-me-shared/references/core.md#最终去-ai-痕迹)复查**：清除交付物中的 AI 防御性套话、过于绝对的表述、`work_<agent名>`/`agent_work`/本机绝对路径及助手/工具/内部流程残留（教师明确要求的工具声明除外）。
+
 [最初的完整 Prompt](docs/FINAL_PROMPT.zh-CN.md)是历史需求记录。当前流程以技能入口为准：课堂笔记先确认大纲，网络调研范围清楚就直接推进。
 
 v1.1 增加[演讲与报告增量 Prompt](docs/SPEECH_REPORT_PROMPT.zh-CN.md)：演讲先确认风格/时长/听众目标，核对主语、人称与时间；报告用项目问题、实验对照及实验关系组织层层推进的论证。

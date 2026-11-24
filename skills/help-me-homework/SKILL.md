@@ -13,7 +13,7 @@ description: 依据作业要求与评分细则完成题目、代码、实验及 
 2. 读[运行工具](../help-me-shared/references/runtime.md)，以对应作业目录（在课程结构下为 `课程名/作业/<作业名称>_<时间>/`）作为 `--task-dir` 创建 `work_<agent名>/` 下的 code、report、submit（Claude Code 用 work_claude，Codex 用 work_codex）；遇冲突用 work_<agent名>_2 等，继续同任务显式复用原目录，不动 `要求/` 内的原始材料。
 3. 根据要求/文献/评分覆盖实施，先补必做和高权重证据，再做有价值的扩展。只声称实际读过/运行过的内容。
 4. 写报告时读[报告路线](../help-me-shared/references/report.md)和[排版规范](../help-me-shared/references/formatting.md)，按其中的 LaTeX 交付约定生成；先理清项目目的、每个实验的目的/对照及相互关系，使大节按问题证据递进、小节按逻辑与实验依赖展开。按需调用 nature skills 时一并传递 LaTeX 输出要求，老师模板优先，不虚构因果或决策历史。
-5. 按[验证规则](../help-me-shared/references/verification.md)检查实际解答、代码和结果；核对真实 `.tex` 主入口、配套资源、由最新源码编译的 PDF 及每页显示，再将正式材料整理入 submit。只有 `.md`、改后缀文件或旧 PDF 均不算报告完成。内部来源记录/日志/QA 不放入正式作业。
+5. 按[验证规则](../help-me-shared/references/verification.md)检查实际解答、代码和结果；交付与最终编译前按[最终去 AI 痕迹](../help-me-shared/references/core.md#最终去-ai-痕迹)通查全部代码、注释、配置、`.tex` 源码与图注，清除 AI 防御性套话、过于绝对的表述及 `work_<agent名>`/`agent_work`/本机绝对路径和内部流程残留（教师要求声明除外），改后重跑检查并重新编译 PDF。核对真实 `.tex` 主入口、配套资源、由最新源码编译的 PDF 及每页显示，再将正式材料整理入 submit。只有 `.md`、改后缀文件或旧 PDF 均不算报告完成。内部来源记录/日志/QA 不放入正式作业。
 
 **默认停在未压缩的 submit。** 老师要求 ZIP、要求 Overleaf 源码或要求“完成全部作业”都不构成本次压缩授权。用户明确说打包/压缩后才创建归档并解压核验；上传课程系统仍需单独明确请求。
 

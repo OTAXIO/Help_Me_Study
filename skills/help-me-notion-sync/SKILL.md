@@ -10,7 +10,7 @@ description: 定位目标 Notion 页面并持久化课程映射，按既有层�
 1. 有目标链接先读取核对；课程可查本地课程/学期映射，再读真实父页/子页。明确时不重复索取链接，歧义时先查询再问；不凭缓存认定页面仍可访问。独立调研直接用目标页，不虚构课程来录入映射。
 2. 按共享规则核对写入授权与范围，区分写入目标和只供参考或阅读的页面。新课堂正文按 [help-me-class-learning-note](../help-me-class-learning-note/SKILL.md)完成大纲确认；网络调研按 [help-me-online-research-note](../help-me-online-research-note/SKILL.md)推进，不要求课堂大纲审批。同步用户已提供且明确要同步的现成笔记，只处理指定内容，不重新生成或重审大纲。
 3. 写前读相关页面、附件和导航，大改存本地恢复快照。复用现有页面；课堂保持课程→章节→必要拓展，独立调研围绕主题和现有目标结构组织。保留作业入口和指定不动内容。
-4. 先读[排版规范](../help-me-shared/references/formatting.md)和[格式检查](../help-me-shared/references/format-validation.md)，确认接口接收 Markdown 还是原生块/富文本并正确映射，不能把标记字符串直接写成普通正文。按当前规范分批写，超时先回读，禁止盲重试导致重复或丢子页。
+4. 先读[排版规范](../help-me-shared/references/formatting.md)和[格式检查](../help-me-shared/references/format-validation.md)，写入前按[最终去 AI 痕迹](../help-me-shared/references/core.md#最终去-ai-痕迹)复查待同步正文，清除 AI 防御性套话、过于绝对的表述、`work_<agent名>`/`agent_work`/本机绝对路径及内部流程标记（仅保留用户显式要求同步的原始内容）。确认接口接收 Markdown 还是原生块/富文本并正确映射，不能把标记字符串直接写成普通正文。按当前规范分批写，超时先回读，禁止盲重试导致重复或丢子页。
 5. 回读父页及每个受影响页，检查标题/列表/样式/表/公式/代码/资源与未知块；源合法、转换节点、最终显示分开验收。回读的合法 Markdown 标记不等于页面泄漏，视觉检查另行记状态。
 6. 只把实际核验的页面映射写本地用户状态；不放公开仓库、不写宿主全局记忆。支持查询/更正/更新；映射工具本身不联网验证页面。
 

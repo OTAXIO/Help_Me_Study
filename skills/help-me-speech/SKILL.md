@@ -11,6 +11,6 @@ description: 基于 PPT 撰写个人化演讲稿：先明确风格、时长、�
 2. 读全部相关幻灯片、图表、备注和附录，核对版本和页序，不擅自改 PPT。按[个人表达](../help-me-shared/references/writing-voice.md)使用用户授权样本；不可用就依据明确偏好，不声称充分拟合。
 3. 确定谁在讲、讲谁、面向谁、以何时间为准；读[身份与时间](../help-me-shared/references/voice-and-time.md)，不把参考作者的“我/我们”、经历和状态移给用户。
 4. 明确主线和每页任务，按[段落逻辑](../help-me-shared/references/narrative.md)连起段内、段间与翻页。信息够时直接生成，不额外强加提纲审批；用户要求先看提纲时等待。
-5. 按场景和时长写可朗读稿，逐页核对事实/贡献/代词/时间，再查朗读节奏。估时与真实试讲分别记录，不声称未做的实测。
+5. 按场景和时长写可朗读稿，逐页核对事实/贡献/代词/时间，再查朗读节奏；定稿前必须按[最终去 AI 痕迹](../help-me-shared/references/core.md#最终去-ai-痕迹)清除 AI 防御性套话、过于绝对的表述、机械过渡及 `work_<agent名>`/`agent_work`/本机路径与内部记录残留。估时与真实试讲分别记录，不声称未做的实测。
 
 可用[演讲需求表](../help-me-shared/templates/speech-brief.md)与[主体表](../help-me-shared/templates/speaker-map.md)做内部记录，不混入正文。新产物放 work_<agent名>/report 的合理位置，Word/PDF 需要时才用对应工具生成并看实际版式。未经要求不改 PPT、不写 Notion、不发送；submit 等明确指令才压缩。

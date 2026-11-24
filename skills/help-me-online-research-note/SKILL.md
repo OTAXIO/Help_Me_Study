@@ -69,4 +69,4 @@ description: 检索并交叉核验网络技术资料、教程、视频与社区�
 
 按共享边界确认用户已授权写入后，交 [help-me-notion-sync](../help-me-notion-sync/SKILL.md)按写前读、分批写和逐页回读执行，不额外要求课堂大纲审批。只供参考或阅读的 Notion 链接作为来源使用，没有明确写入意图时交本地稿。独立主题按目标页现有结构组织，不伪造课程/学期来迁就课程映射工具。
 
-每批按[格式检查](../help-me-shared/references/format-validation.md)核对源、转换与显示。交付报告本地文件/页面、核验覆盖、限制和真实同步状态；接口成功不能代替回读。
+每批按[格式检查](../help-me-shared/references/format-validation.md)核对源、转换与显示。交付或同步前，必须按[最终去 AI 痕迹](../help-me-shared/references/core.md#最终去-ai-痕迹)复查正文：保留真实证据边界与核验范围，清除 AI 防御性套话、过于绝对的断言及 `work_<agent名>`/`agent_work`/本机路径与内部流程残留。交付报告本地文件/页面、核验覆盖、限制和真实同步状态；接口成功不能代替回读。

@@ -31,6 +31,6 @@ description: 基于课件、课堂字幕与课程任务生成课堂学习笔记�
 
 每批如 1—2 章，按共同写法完成正文、推导、例子和配图。公式和例子实际核算。每批通过后继续，除非用户另要求逐批审核。
 
-先读[排版规范](../help-me-shared/references/formatting.md)，按[格式检查](../help-me-shared/references/format-validation.md)核对标题、段落、样式、列表、公式、代码、表格和资源。源结构、转换后的节点与最终显示分别验，标记成对不代表通过；通用 Markdown 预览不能证明 Notion 或数学排版正确。
+先读[排版规范](../help-me-shared/references/formatting.md)，按[格式检查](../help-me-shared/references/format-validation.md)核对标题、段落、样式、列表、公式、代码、表格和资源。源结构、转换后的节点与最终显示分别验，标记成对不代表通过；通用 Markdown 预览不能证明 Notion 或数学排版正确。定稿写入本地 `资料/笔记/` 或交 Notion 同步前，必须按[最终去 AI 痕迹](../help-me-shared/references/core.md#最终去-ai-痕迹)清除 AI 防御性套话、过于绝对的表述及 `work_<agent名>`/`agent_work`/本机路径与内部流程残留。
 
 按共享边界确认用户已授权写入，并完成课堂大纲确认后，交[同步技能](../help-me-notion-sync/SKILL.md)执行写前读、资源保留和逐页回读。只供参考或阅读的 Notion 链接作为来源使用。按[验证规则](../help-me-shared/references/verification.md)报告覆盖、实际核验与缺口。
